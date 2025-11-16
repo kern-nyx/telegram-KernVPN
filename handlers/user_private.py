@@ -5,6 +5,9 @@ import os
 import kbds.keyboards as kb
 from dataBase.database import get_user, add_user, activate_tariff
 
+from pathlib import Path
+from aiogram.types import FSInputFile
+
 user_private_router = Router()
 
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
@@ -180,8 +183,8 @@ async def feedback_callback(callback: CallbackQuery):
     text = (
         "📞 Обратная связь\n\n"
         "Если у вас возникли вопросы или проблемы — пишите:\n"
-        "Электронная почта: support@kernvpn.com\n"
-        "Телеграм: @kernvpn_support"
+        "Электронная почта: imceodud@gmail.com\n"
+        "Телеграм: @feedback_nyx"
     )
     await callback.message.answer(text, reply_markup=kb.back_menu)
 
@@ -190,3 +193,29 @@ async def back_callback(callback: CallbackQuery):
     """Возврат в главное меню"""
     await callback.answer()
     await callback.message.answer("Главное меню:", reply_markup=kb.main)
+
+
+@user_private_router.callback_query(F.data == "instructions")
+async def instructions_callback(callback: CallbackQuery):
+    await callback.answer()
+    
+    instruction_file = Path("instructions/instruction.txt")
+    
+    # Текст с кликабельными ссылками
+    caption_text = (
+        "📖 Инструкция по использованию KernVPN\n\n"
+        "<b>Ссылки для скачивания:</b>\n\n"
+        "🍎 <a href='https://apps.apple.com/us/app/amneziavpn/id1600529900'>iOS - AmneziaVPN</a>\n"
+        "🤖 <a href='https://play.google.com/store/apps/details?id=org.amnezia.vpn'>Android</a>\n"
+        "💻 <a href='https://m-1-9-3w5hsuiikq-ez.a.run.app/downloads'>Windows</a>\n"
+        "🍎 <a href='https://m-1-9-3w5hsuiikq-ez.a.run.app/downloads'>macOS</a>\n"
+        "🐧 <a href='https://m-1-9-3w5hsuiikq-ez.a.run.app/downloads'>Linux</a>\n\n"
+        "📥 Откройте файл ниже для полной инструкции"
+    )
+    
+    await callback.message.answer_document(
+        document=FSInputFile(str(instruction_file)),
+        caption=caption_text,
+        parse_mode="HTML",
+        reply_markup=kb.back_menu
+    )

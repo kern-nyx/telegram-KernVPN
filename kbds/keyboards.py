@@ -5,6 +5,7 @@ main = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="💰 Тарифы", callback_data="tariffs")],
         [InlineKeyboardButton(text="👤 Профиль", callback_data="profile")],
+        [InlineKeyboardButton(text="📖 Инструкция", callback_data="instructions")],
         [InlineKeyboardButton(text="ℹ️ О нас", callback_data="about")],
         [InlineKeyboardButton(text="📞 Обратная связь", callback_data="feedback")],
     ]
